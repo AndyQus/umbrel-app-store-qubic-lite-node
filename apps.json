@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "id": "qubic-lite-node",
+      "repo": "local",
+      "version": "0.1.0"
+    }
+  ]
+}
