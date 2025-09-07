@@ -1,6 +1,6 @@
 id: "qubic-lite-node"
 name: "Qubic Lite Node"
-category: "Crypto"
+category: "Productivity"
 version: "0.1.0"
 tagline: "Blazor dashboard for Qubic Lite Node"
 description: "A lightweight node that synchronizes transactions and data from the Qubic network via Tor and provides a dashboard."
