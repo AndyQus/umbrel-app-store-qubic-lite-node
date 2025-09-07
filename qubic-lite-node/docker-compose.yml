@@ -7,7 +7,7 @@ services:
       APP_PORT: 8080
 
   qubic-lite-core:
-    image: andyqus/qubic-lite-node:0.1.0
+    image: andyqus/qubic_lite_node:latest   # 🔑 Dein Image von DockerHub
     command: ["dotnet", "qubic-lite.core.dll"]
     restart: unless-stopped
     environment:
@@ -15,13 +15,14 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - TorProxy=socks5://tor:9050
       - OnionHostnamePath=/var/lib/tor/hidden_service/service1/hostname
+      - DATA_DIR=/app/data
     volumes:
       - ${APP_DATA_DIR}/core-data:/app/data
     networks:
       - qubicnet
 
   qubic-lite-ui:
-    image: andyqus/qubic-lite-node:0.1.0
+    image: andyqus/qubic_lite_node:latest   # 🔑 selbes Image, UI läuft auch drin
     command: ["dotnet", "qubic-lite.ui.dll"]
     restart: unless-stopped
     environment:

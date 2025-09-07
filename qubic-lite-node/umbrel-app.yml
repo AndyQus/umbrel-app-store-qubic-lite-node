@@ -1,11 +1,11 @@
 id: "qubic-lite-node"
 name: "Qubic Lite Node"
-category: "Crypto, AI"
+category: "Crypto"
 version: "0.1.0"
 tagline: "Blazor dashboard for Qubic Lite Node"
 description: "A lightweight node that synchronizes transactions and data from the Qubic network via Tor and provides a dashboard."
-developer: andyqus
-website: https://qubic.org
-repo: https://github.com/AndyQus/umbrel-app-store-qubic-lite-mode
-support: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-mode/issues"
+developer: "Andyqus"
+website: "https://qubic.org"
+repo: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-node"
+support: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-node/issues"
 port: 8080
