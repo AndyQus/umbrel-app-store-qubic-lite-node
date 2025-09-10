@@ -2,7 +2,7 @@ manifestVersion: 1
 id: "qubic-lite-node"
 name: "Qubic Lite Node (Test)"
 tagline: "⚠️ Test version of the Qubic Lite Node dashboard"
-icon: "icon.svg"
+icon: "https://raw.githubusercontent.com/AndyQus/umbrel-app-store-qubic-lite-node/main/qubic-lite-node/icon.svg"
 category: "Productivity"
 version: "0.1.0"
 port: 8089
