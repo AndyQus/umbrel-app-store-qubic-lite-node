@@ -9,7 +9,7 @@ developer: "Andyqus"
 website: "https://qubic.org"
 repo: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-node"
 support: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-node/issues"
-port: 8080
+port: 8089
 icon: "icon.svg"
 
 services:
@@ -33,7 +33,7 @@ services:
     image: andyqus/qubic-lite-node:latest
     command: ["dotnet", "qubic-lite.ui.dll"]
     environment:
-      ASPNETCORE_URLS: "http://0.0.0.0:8080"
+      ASPNETCORE_URLS: "http://0.0.0.0:8089"
       CORE_API_URL: "http://core:9090"
       ASPNETCORE_ENVIRONMENT: "Production"
     depends_on:
