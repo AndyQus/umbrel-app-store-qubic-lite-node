@@ -13,16 +13,6 @@ website: "https://qubic.org"
 repo: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-node"
 support: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-node/issues"
 
-ports:
-  - id: ui
-    target: 8080
-    published: 8089
-    protocol: tcp
-  - id: core
-    target: 9090
-    published: 9090
-    protocol: tcp
-
 services:
   - id: core
     name: Qubic Core-Test
