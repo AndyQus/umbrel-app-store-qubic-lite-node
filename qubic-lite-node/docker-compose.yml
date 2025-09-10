@@ -1,10 +1,12 @@
 version: "3.8"
 
 services:
-  app_proxy:   # Umbrel braucht diesen Proxy-Service!
+  app_proxy:
     environment:
       APP_HOST: qubic-lite-ui
       APP_PORT: 8080
+    networks:
+      - qubicnet   # <--- Proxy ins gleiche Netz
 
   qubic-lite-core:
     image: andyqus/qubic-lite-node:latest
