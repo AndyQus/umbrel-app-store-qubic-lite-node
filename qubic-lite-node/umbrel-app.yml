@@ -5,13 +5,22 @@ tagline: "⚠️ Test version of the Qubic Lite Node dashboard"
 icon: "https://raw.githubusercontent.com/AndyQus/umbrel-app-store-qubic-lite-node/main/qubic-lite-node/icon.svg"
 category: "Productivity"
 version: "0.1.0"
+port: 8089
 description: >-
   A lightweight node that synchronizes transactions and data from the Qubic network via Tor and provides a dashboard.
 
 developer: "Andyqus"
 website: "https://qubic.org"
+submitter: ""
+submission: ""
 repo: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-node"
 support: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-node/issues"
+gallery: []
+releaseNotes: ""
+dependencies: []
+path: ""
+defaultUsername: ""
+defaultPassword: ""
 
 services:
   - id: core
@@ -20,10 +29,12 @@ services:
     command: ["dotnet", "core/qubic-lite.core.dll"]
     environment:
       ASPNETCORE_URLS: "http://0.0.0.0:9090"
-      ASPNETCORE_ENVIRONMENT: "Production"
+      ASPNETCORE_ENVIRONMENT: "Production"      
+      TorProxy: "socks5://tor:9050"
+      OnionHostnamePath: "/var/lib/tor/hidden_service/service1/hostname"
       DATA_DIR: "/app/data"
     volumes:
-      - core-test-data:/app/data
+      - core-data-test:/app/data
     restart: on-failure
 
   - id: ui
@@ -36,6 +47,8 @@ services:
       ASPNETCORE_ENVIRONMENT: "Production"
     depends_on:
       - core
+    ports:
+      - "8089:8089"
     restart: on-failure
 
 volumes:
