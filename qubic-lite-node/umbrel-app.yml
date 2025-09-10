@@ -43,7 +43,7 @@ services:
     command: ["dotnet", "ui/qubic-lite.ui.dll"]
     environment:
       ASPNETCORE_URLS: "http://0.0.0.0:8080"
-      CORE_API_URL: "http://core:9090"
+      CORE_API_URL: "http://qubic-lite-core:9090"
       ASPNETCORE_ENVIRONMENT: "Production"
     depends_on:
       - core
