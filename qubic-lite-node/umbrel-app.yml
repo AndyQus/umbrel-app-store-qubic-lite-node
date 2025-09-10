@@ -1,16 +1,26 @@
+manifestVersion: 1
 id: "qubic-lite-node-test"
 name: "Qubic Lite Node (Test)"
+tagline: "⚠️ Test version of the Qubic Lite Node dashboard"
+icon: "icon.svg"
 category: "Productivity"
 version: "0.1.0"
-# tagline: "Blazor dashboard for Qubic Lite Node"
-tagline: "⚠️ Test version of the Qubic Lite Node dashboard"
-description: "A lightweight node that synchronizes transactions and data from the Qubic network via Tor and provides a dashboard."
+port: 8089
+description: >-
+  A lightweight node that synchronizes transactions and data from the Qubic network via Tor and provides a dashboard.
+
 developer: "Andyqus"
 website: "https://qubic.org"
+submitter: ""
+submission: ""
 repo: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-node"
 support: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-node/issues"
-port: 8089
-icon: "icon.svg"
+gallery: []
+releaseNotes: ""
+dependencies: []
+path: ""
+defaultUsername: ""
+defaultPassword: ""
 
 services:
   - id: core
@@ -24,7 +34,6 @@ services:
       OnionHostnamePath: "/var/lib/tor/hidden_service/service1/hostname"
       DATA_DIR: "/app/data"
     volumes:
-      # - core-data:/app/data
       - core-test-data:/app/data
     restart: on-failure
 
@@ -43,5 +52,4 @@ services:
     restart: on-failure
 
 volumes:
-  # - core-data
   - core-test-data
