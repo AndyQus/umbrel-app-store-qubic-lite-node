@@ -42,13 +42,13 @@ services:
     image: andyqus/qubic-lite-node:latest
     command: ["dotnet", "qubic-lite.ui.dll"]
     environment:
-      ASPNETCORE_URLS: "http://0.0.0.0:8089"
+      ASPNETCORE_URLS: "http://0.0.0.0:8080"
       CORE_API_URL: "http://core:9090"
       ASPNETCORE_ENVIRONMENT: "Production"
     depends_on:
       - core
     ports:
-      - "8089:8089"
+      - "8089:8080"
     restart: on-failure
 
 volumes:
