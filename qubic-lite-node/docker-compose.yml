@@ -1,13 +1,13 @@
 version: "3.8"
 
 services:
-  app_proxy:
+  app_proxy:   # Umbrel braucht diesen Proxy-Service!
     environment:
       APP_HOST: qubic-lite-ui
       APP_PORT: 8080
 
   qubic-lite-core:
-    image: andyqus/qubic-lite-node:latest   # 🔑 Dein Image von DockerHub
+    image: andyqus/qubic-lite-node:latest
     command: ["dotnet", "qubic-lite.core.dll"]
     restart: unless-stopped
     environment:
@@ -22,7 +22,7 @@ services:
       - qubicnet
 
   qubic-lite-ui:
-    image: andyqus/qubic-lite-node:latest   # 🔑 selbes Image, UI läuft auch drin
+    image: andyqus/qubic-lite-node:latest
     command: ["dotnet", "qubic-lite.ui.dll"]
     restart: unless-stopped
     environment:
