@@ -33,9 +33,6 @@ services:
       TorProxy: "socks5://tor:9050"
       # OnionHostnamePath: "/var/lib/tor/hidden_service/service1/hostname"
       DATA_DIR: "/app/data"
-    tor:
-      enabled: true
-      port: 9090
     volumes:
       - core-data-test:/app/data
     restart: on-failure
@@ -47,15 +44,23 @@ services:
     environment:
       ASPNETCORE_URLS: "http://0.0.0.0:8080"
       CORE_API_URL: "http://qubic-lite-core:9090"
-      ASPNETCORE_ENVIRONMENT: "Production"
-    tor:
-      enabled: true
-      port: 8080
+      ASPNETCORE_ENVIRONMENT: "Production"   
     depends_on:
       - core
     # ports:
     #   - "8089:8089"
     restart: on-failure
+
+app_proxy:
+  port: 8089
+  target: http://ui:8080
+  # 🟢 wichtig: alle Pfade durchlassen
+  paths:
+    - /
+    - /app.css
+    - /qubic-lite.ui.styles.css
+    - /lib
+    - /favicon.ico
 
 volumes:
   - core-data-test
