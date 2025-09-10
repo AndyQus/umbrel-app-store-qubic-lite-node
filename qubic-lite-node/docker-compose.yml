@@ -6,17 +6,15 @@ services:
       APP_HOST: qubic-lite-ui
       APP_PORT: 8080
     networks:
-      - qubicnet   # <--- Proxy ins gleiche Netz
+      - qubicnet   # Proxy muss im gleichen Netz sein
 
   qubic-lite-core:
     image: andyqus/qubic-lite-node:latest
-    command: ["dotnet", "qubic-lite.core.dll"]
+    command: ["dotnet", "core/qubic-lite.core.dll"]
     restart: unless-stopped
     environment:
       - ASPNETCORE_URLS=http://0.0.0.0:9090
       - ASPNETCORE_ENVIRONMENT=Production
-      - TorProxy=socks5://tor:9050
-      - OnionHostnamePath=/var/lib/tor/hidden_service/service1/hostname
       - DATA_DIR=/app/data
     volumes:
       - ${APP_DATA_DIR}/core-data:/app/data
@@ -25,7 +23,7 @@ services:
 
   qubic-lite-ui:
     image: andyqus/qubic-lite-node:latest
-    command: ["dotnet", "qubic-lite.ui.dll"]
+    command: ["dotnet", "ui/qubic-lite.ui.dll"]
     restart: unless-stopped
     environment:
       - ASPNETCORE_URLS=http://0.0.0.0:8080
