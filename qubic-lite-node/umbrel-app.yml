@@ -35,6 +35,7 @@ services:
       DATA_DIR: "/app/data"
     volumes:
       - core-data-test:/app/data
+      - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host
     restart: on-failure
 
   - id: ui
