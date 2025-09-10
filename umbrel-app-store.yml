@@ -1,0 +1,8 @@
+id: qubic-test
+name: "Qubic App Store (Test)"
+description: "Testing versions of Qubic-related services for Umbrel."
+maintainer: "Andyqus"
+website: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-node"
+
+apps:
+  - qubic-lite-node-test
