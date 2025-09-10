@@ -18,9 +18,11 @@ support: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-node/issues"
 # -> Core API auf 9090
 ports:
   - id: ui
-    port: 8089
+    target: 8080
+    published: 8089
   - id: core
-    port: 9090
+    target: 9090
+    published: 9090
 
 services:
   - id: core
