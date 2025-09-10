@@ -1,5 +1,5 @@
 manifestVersion: 1
-id: "qubic-lite-node-test"
+id: "qubic-lite-node"
 name: "Qubic Lite Node (Test)"
 tagline: "⚠️ Test version of the Qubic Lite Node dashboard"
 icon: "icon.svg"
