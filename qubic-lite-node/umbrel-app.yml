@@ -4,10 +4,18 @@ name: "Qubic LiteNode+"
 tagline: "⚠️ Test version of the Qubic Lite Node dashboard"
 icon: "https://raw.githubusercontent.com/AndyQus/umbrel-app-store-qubic-lite-node/main/qubic-lite-node/icon.svg"
 category: "Productivity"
-version: "1.0.3"
+version: "1.0.4"
 port: 8089
-description: >-
-  A lightweight node that synchronizes transactions and data from the Qubic network via Tor and provides a dashboard.
+description: |-
+  A lightweight node that synchronizes transactions and data from the Qubic network via Tor
+  and provides a dashboard.
+
+  👉 Access the API documentation here: [Swagger UI](http://localhost:9090/api/swagger)
+
+  ⚡ Features:
+   - Tor support
+   - Peer discovery
+   - Transactions sync 
 
 developer: "Andyqus"
 website: "https://qubic.org"
