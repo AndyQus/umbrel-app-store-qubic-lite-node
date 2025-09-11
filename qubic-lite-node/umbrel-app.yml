@@ -52,16 +52,16 @@ services:
     #   - "8089:8089"
     restart: on-failure
 
-app_proxy:
-  port: 8089
-  target: http://ui:8080
-  # 🟢 wichtig: alle Pfade durchlassen
-  paths:
-    - /
-    - /app.css
-    - /qubic-lite.ui.styles.css
-    - /lib
-    - /favicon.ico
+# app_proxy:
+#   port: 8089
+#   target: http://ui:8080
+#   # 🟢 wichtig: alle Pfade durchlassen
+#   paths:
+#     - /
+#     - /app.css
+#     - /qubic-lite.ui.styles.css
+#     - /lib
+#     - /favicon.ico
 
 volumes:
   - core-data-test
