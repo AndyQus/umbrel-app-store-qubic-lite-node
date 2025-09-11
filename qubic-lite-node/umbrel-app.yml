@@ -4,7 +4,7 @@ name: "Qubic LiteNode+"
 tagline: "⚠️ Test version of the Qubic Lite Node dashboard"
 icon: "https://raw.githubusercontent.com/AndyQus/umbrel-app-store-qubic-lite-node/main/qubic-lite-node/icon.svg"
 category: "Productivity"
-version: "0.1.0"
+version: "1.0.1"
 port: 8089
 description: >-
   A lightweight node that synchronizes transactions and data from the Qubic network via Tor and provides a dashboard.
@@ -21,47 +21,3 @@ dependencies: []
 path: ""
 defaultUsername: ""
 defaultPassword: ""
-
-services:
-  - id: core
-    name: Qubic Core-Test
-    image: andyqus/qubic-lite-node:latest
-    command: ["dotnet", "core/qubic-lite.core.dll"]
-    environment:
-      ASPNETCORE_URLS: "http://0.0.0.0:9090"
-      ASPNETCORE_ENVIRONMENT: "Production"      
-      TorProxy: "socks5://tor:9050"
-      # OnionHostnamePath: "/var/lib/tor/hidden_service/service1/hostname"
-      DATA_DIR: "/app/data"
-    volumes:
-      - core-data-test:/app/data
-      - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host
-    restart: on-failure
-
-  - id: ui
-    name: Qubic UI-Test
-    image: andyqus/qubic-lite-node:latest
-    command: ["dotnet", "ui/qubic-lite.ui.dll"]
-    environment:
-      ASPNETCORE_URLS: "http://0.0.0.0:8080"
-      CORE_API_URL: "http://qubic-lite-core:9090"
-      ASPNETCORE_ENVIRONMENT: "Production"   
-    depends_on:
-      - core
-    # ports:
-    #   - "8089:8089"
-    restart: on-failure
-
-# app_proxy:
-#   port: 8089
-#   target: http://ui:8080
-#   # 🟢 wichtig: alle Pfade durchlassen
-#   paths:
-#     - /
-#     - /app.css
-#     - /qubic-lite.ui.styles.css
-#     - /lib
-#     - /favicon.ico
-
-volumes:
-  - core-data-test

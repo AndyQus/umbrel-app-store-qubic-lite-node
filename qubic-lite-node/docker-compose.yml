@@ -1,39 +1,59 @@
-version: "3.8"
+version: "3.9"
 
 services:
+  # Umbrels App-Proxy veröffentlicht LAN & Tor auf APP_HOST:APP_PORT
   app_proxy:
     environment:
-      APP_HOST: qubic-lite-ui
+      APP_HOST: qubic-lite-node_edge
       APP_PORT: 8080
-    networks:
-      - qubicnet   # Proxy muss im gleichen Netz sein
+      # PROXY_ENABLE_WEBSOCKETS: "true"   # optional
 
-  qubic-lite-core:
-    image: andyqus/qubic-lite-node:latest
-    command: ["dotnet", "core/qubic-lite.core.dll"]
+  # Edge-Proxy: /  → UI,  /api/* → Core
+  qubic-lite-node_edge:
+    image: nginx:1.27-alpine
     restart: unless-stopped
-    environment:
-      - ASPNETCORE_URLS=http://0.0.0.0:9090
-      - ASPNETCORE_ENVIRONMENT=Production
-      - DATA_DIR=/app/data
-    volumes:
-      - ${APP_DATA_DIR}/core-data:/app/data
-    networks:
-      - qubicnet
-
-  qubic-lite-ui:
-    image: andyqus/qubic-lite-node:latest
-    command: ["dotnet", "ui/qubic-lite.ui.dll"]
-    restart: unless-stopped
-    environment:
-      - ASPNETCORE_URLS=http://0.0.0.0:8080
-      - CORE_API_URL=http://qubic-lite-core:9090
-      - ASPNETCORE_ENVIRONMENT=Production
     depends_on:
-      - qubic-lite-core
-    networks:
-      - qubicnet
+      - qubic-lite-node_ui
+      - qubic-lite-node_core
+    volumes:
+      - ${APP_DATA_DIR}/edge/nginx.conf:/etc/nginx/conf.d/default.conf:ro
 
-networks:
-  qubicnet:
-    driver: bridge
+  # Core (API)
+  qubic-lite-node_core:
+    image: andyqus/qubic-lite-node:core-1.0.1
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_DATAPROTECTION__KEYRING__PATH=/data/keys
+      - ASPNETCORE_DATAPROTECTION__APPLICATIONNAME=QubicLite-Core
+      - ONION_HOSTNAME_PATH=/tor-host/hostname
+    volumes:
+      - core_data:/data
+      - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host:ro
+    healthcheck:
+      test: ["CMD", "wget", "-q", "http://localhost:9090/health", "-O", "-"]
+      interval: 20s
+      timeout: 3s
+      retries: 10
+
+  # UI
+  qubic-lite-node_ui:
+    image: andyqus/qubic-lite-node:ui-1.0.1
+    restart: unless-stopped
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_DATAPROTECTION__KEYRING__PATH=/data/keys
+      - ASPNETCORE_DATAPROTECTION__APPLICATIONNAME=QubicLite-UI
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
+      # UI spricht Core intern direkt (ohne Edge):
+      - CORE_API_URL=http://qubic-lite-node_core:9090
+      - ONION_HOSTNAME_PATH=/tor-host/hostname
+    volumes:
+      - ui_data:/data
+      - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host:ro
+    depends_on:
+      - qubic-lite-node_core
+
+volumes:
+  core_data:
+  ui_data:
