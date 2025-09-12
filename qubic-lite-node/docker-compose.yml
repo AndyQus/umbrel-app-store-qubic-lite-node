@@ -5,7 +5,8 @@ services:
   app_proxy:
     environment:
       APP_HOST: qubic-lite-node_edge
-      APP_PORT: 8080
+      APP_PORT: 8080  
+      PROXY_AUTH_ADD: "false"
       # PROXY_ENABLE_WEBSOCKETS: "true"   # optional
 
   # Edge-Proxy: /  → UI,  /api/* → Core
