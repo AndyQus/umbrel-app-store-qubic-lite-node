@@ -7,7 +7,7 @@ services:
       APP_HOST: qubic-lite-node_edge
       APP_PORT: 8080  
       PROXY_AUTH_ADD: "true"
-      PROXY_AUTH_WHITELIST: "/api/*"
+      PROXY_AUTH_WHITELIST: "/api/*,/swagger/*"
 
   # Edge-Proxy: /  → UI,  /api/* → Core
   qubic-lite-node_edge:
