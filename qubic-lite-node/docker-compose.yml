@@ -6,8 +6,8 @@ services:
     environment:
       APP_HOST: qubic-lite-node_edge
       APP_PORT: 8080  
-      PROXY_AUTH_ADD: "false"
-      # PROXY_ENABLE_WEBSOCKETS: "true"   # optional
+      PROXY_AUTH_ADD: "true"
+      PROXY_AUTH_WHITELIST: "/api/*"
 
   # Edge-Proxy: /  → UI,  /api/* → Core
   qubic-lite-node_edge:
@@ -21,7 +21,7 @@ services:
 
   # Core (API)
   qubic-lite-node_core:
-    image: andyqus/qubic-lite-node:core-v1.0.15
+    image: andyqus/qubic-lite-node:core-v1.0.16
     restart: unless-stopped
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
@@ -39,7 +39,7 @@ services:
 
   # UI
   qubic-lite-node_ui:
-    image: andyqus/qubic-lite-node:ui-v1.0.15
+    image: andyqus/qubic-lite-node:ui-v1.0.16
     restart: unless-stopped
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
