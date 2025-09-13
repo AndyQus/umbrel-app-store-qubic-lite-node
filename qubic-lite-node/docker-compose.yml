@@ -29,7 +29,7 @@ services:
       - ASPNETCORE_DATAPROTECTION__APPLICATIONNAME=QubicLite-Core
       - ONION_HOSTNAME_PATH=/tor-host/hostname
     volumes:
-      - core_data:/data
+      - ${APP_DATA_DIR}/core-data:/app/data
       - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host:ro
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:9090/status || exit 1"]
@@ -49,8 +49,9 @@ services:
       # UI spricht Core intern direkt (ohne Edge):
       - CORE_API_URL=http://qubic-lite-node_core:9090
       - ONION_HOSTNAME_PATH=/tor-host/hostname
+      - DATA_DIR=/app/data
     volumes:
-      - ui_data:/data
+      - ${APP_DATA_DIR}/ui-data:/app/data
       - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host:ro
     depends_on:
       - qubic-lite-node_core
