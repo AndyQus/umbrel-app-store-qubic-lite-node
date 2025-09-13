@@ -21,7 +21,7 @@ services:
 
   # Core (API)
   qubic-lite-node_core:
-    image: andyqus/qubic-lite-node:core-v1.0.16
+    image: andyqus/qubic-lite-node:core-v1.0.17
     restart: unless-stopped
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
@@ -39,7 +39,7 @@ services:
 
   # UI
   qubic-lite-node_ui:
-    image: andyqus/qubic-lite-node:ui-v1.0.16
+    image: andyqus/qubic-lite-node:ui-v1.0.17
     restart: unless-stopped
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
