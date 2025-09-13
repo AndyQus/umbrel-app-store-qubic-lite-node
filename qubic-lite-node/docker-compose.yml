@@ -21,41 +21,42 @@ services:
 
   # Core (API)
   qubic-lite-node_core:
-    image: andyqus/qubic-lite-node:core-v1.0.17
+    image: andyqus/qubic-lite-node:core-v1.0.18
     restart: unless-stopped
     environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:9090
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_DATAPROTECTION__KEYRING__PATH=/data/keys
+      - ASPNETCORE_DATAPROTECTION__KEYRING__PATH=/app/data/keys
       - ASPNETCORE_DATAPROTECTION__APPLICATIONNAME=QubicLite-Core
-      - ONION_HOSTNAME_PATH=/tor-host/hostname
+      - DATA_DIR=/app/data
+      - OnionHostnamePath=/tor-host/hostname
     volumes:
       - ${APP_DATA_DIR}/core-data:/app/data
       - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host:ro
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9090/status || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:9090/api/health > /dev/null || exit 1"]
       interval: 20s
       timeout: 5s
       retries: 10
 
+
+
   # UI
   qubic-lite-node_ui:
-    image: andyqus/qubic-lite-node:ui-v1.0.17
+    image: andyqus/qubic-lite-node:ui-v1.0.18
     restart: unless-stopped
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_DATAPROTECTION__KEYRING__PATH=/data/keys
+      - ASPNETCORE_DATAPROTECTION__KEYRING__PATH=/app/data/keys
       - ASPNETCORE_DATAPROTECTION__APPLICATIONNAME=QubicLite-UI
       - ASPNETCORE_URLS=http://0.0.0.0:8080
       # UI spricht Core intern direkt (ohne Edge):
       - CORE_API_URL=http://qubic-lite-node_core:9090
-      - ONION_HOSTNAME_PATH=/tor-host/hostname
+      - OnionHostnamePath=/tor-host/hostname 
       - DATA_DIR=/app/data
     volumes:
       - ${APP_DATA_DIR}/ui-data:/app/data
       - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host:ro
     depends_on:
       - qubic-lite-node_core
-
-volumes:
-  core_data:
-  ui_data:
+      
