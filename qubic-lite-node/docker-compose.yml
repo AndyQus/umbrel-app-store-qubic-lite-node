@@ -21,11 +21,12 @@ services:
 
   # Core (API)
   qubic-lite-node_core:
-    image: andyqus/qubic-lite-node:core-v1.0.19
+    image: andyqus/qubic-lite-node:core-v1.0.20
     restart: unless-stopped
     environment:
       - ASPNETCORE_URLS=http://0.0.0.0:9090
       - ASPNETCORE_ENVIRONMENT=Production
+      - TorProxy=socks5://tor:9050
       - ASPNETCORE_DATAPROTECTION__KEYRING__PATH=/app/data/keys
       - ASPNETCORE_DATAPROTECTION__APPLICATIONNAME=QubicLite-Core
       - DATA_DIR=/app/data
@@ -39,11 +40,9 @@ services:
       timeout: 5s
       retries: 10
 
-
-
   # UI
   qubic-lite-node_ui:
-    image: andyqus/qubic-lite-node:ui-v1.0.19
+    image: andyqus/qubic-lite-node:ui-v1.0.20
     restart: unless-stopped
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
