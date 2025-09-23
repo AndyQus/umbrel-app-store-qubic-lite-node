@@ -5,24 +5,16 @@ services:
       APP_PORT: 8080
       PROXY_AUTH_ADD: "true"
       PROXY_AUTH_WHITELIST: "/api/*,/swagger/*"
-    networks:
-      - default
-      - umbrel_main_network
 
   qubic-lite-node_edge:
     image: nginx:1.27-alpine
     restart: unless-stopped
-    depends_on: 
-      - qubic-lite-node_ui
-      - qubic-lite-node_core
+    depends_on: [qubic-lite-node_ui, qubic-lite-node_core]
     volumes:
       - ${APP_DATA_DIR}/edge/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     networks:
       - default
-      - umbrel_main_network
-    # Zusätzliche DNS-Auflösung für Tor-Services
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - umbrel_main_network      # optional, schadet nicht
 
   qubic-lite-node_core:
     image: andyqus/qubic-lite-node:core-v1.0.40
@@ -35,23 +27,9 @@ services:
       - ASPNETCORE_DATAPROTECTION__APPLICATIONNAME=QubicLite-Core
       - DATA_DIR=/app/data
       - OnionHostnamePath=/tor-host/hostname
-      - NETWORK_TIMEOUT=60000
-      - TOR_CONNECTION_TIMEOUT=120000
     volumes:
       - ${APP_DATA_DIR}/core-data:/app/data
       - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host:ro
-    # healthcheck:
-    #   test: ["CMD-SHELL", "wget --no-proxy -qO- http://127.0.0.1:9090/api/health > /dev/null || exit 1"]
-    #   interval: 30s
-    #   timeout: 15s
-    #   retries: 5
-    #   start_period: 60s
-    # healthcheck:
-    #   test: ["CMD-SHELL", "http_proxy='' https_proxy='' wget -qO- http://127.0.0.1:9090/api/health > /dev/null || exit 1"]
-    #   interval: 20s
-    #   timeout: 5s
-    #   retries: 10
-    #   start_period: 60s
     healthcheck:
       test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:9090/api/health > /dev/null || exit 1"]
       interval: 20s
@@ -59,7 +37,7 @@ services:
       retries: 10
     networks:
       - default
-      - umbrel_main_network
+      - umbrel_main_network      # WICHTIG!
 
   qubic-lite-node_ui:
     image: andyqus/qubic-lite-node:ui-v1.0.40
@@ -75,13 +53,16 @@ services:
     volumes:
       - ${APP_DATA_DIR}/ui-data:/app/data
       - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host:ro
-    depends_on:
-      qubic-lite-node_core:
-        condition: service_healthy  # Warten auf gesunden Core-Service
+    depends_on: [qubic-lite-node_core]
     networks:
       - default
-      - umbrel_main_network
+      - umbrel_main_network      # optional
 
 networks:
+  # ❌ KEIN external hier! Umbrel erzeugt das default-Netz selbst.
+  # ❌ Kein "name:" für default nötig.
+  # default:  <-- diesen Block komplett weglassen
+
+  # ✅ Nur das Umbrel-Main-Netz als external anhängen:
   umbrel_main_network:
     external: true
