@@ -17,34 +17,31 @@ services:
       - umbrel_main_network      # optional, schadet nicht
 
   qubic-lite-node_core:
-    image: andyqus/qubic-lite-node:core-v1.0.40
-    restart: unless-stopped
-    environment:
-      - ASPNETCORE_URLS=http://0.0.0.0:9090
-      - ASPNETCORE_ENVIRONMENT=Production
-      - TorProxy=socks5://tor:9050
-      - ASPNETCORE_DATAPROTECTION__KEYRING__PATH=/app/data/keys
-      - ASPNETCORE_DATAPROTECTION__APPLICATIONNAME=QubicLite-Core
-      - DATA_DIR=/app/data
-      - OnionHostnamePath=/tor-host/hostname
-    volumes:
-      - ${APP_DATA_DIR}/core-data:/app/data
-      - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host:ro
-    healthcheck:
-      test: ["CMD-SHELL", "http_proxy='' https_proxy='' wget -qO- http://127.0.0.1:9090/api/health > /dev/null || exit 1"]
-      interval: 20s
-      timeout: 5s
-      retries: 10
-      start_period: 60s
-    # healthcheck:
-    #   test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:9090/api/health > /dev/null || exit 1"]
-    #   interval: 20s
-    #   timeout: 5s
-    #   retries: 10
-    networks:
-      - default
-      - umbrel_main_network      # WICHTIG!
-
+   image: andyqus/qubic-lite-node:core-v1.0.40
+   restart: unless-stopped
+   environment:
+    - ASPNETCORE_URLS=http://0.0.0.0:9090
+    - ASPNETCORE_ENVIRONMENT=Production
+    - TorProxy=socks5://host.docker.internal:9050
+    - ASPNETCORE_DATAPROTECTION__KEYRING__PATH=/app/data/keys
+    - ASPNETCORE_DATAPROTECTION__APPLICATIONNAME=QubicLite-Core
+    - DATA_DIR=/app/data
+    - OnionHostnamePath=/tor-host/hostname
+   volumes:
+    - ${APP_DATA_DIR}/core-data:/app/data
+    - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host:ro
+   healthcheck:
+    test: ["CMD-SHELL", "http_proxy='' https_proxy='' wget -qO- http://127.0.0.1:9090/api/health > /dev/null || exit 1"]
+    interval: 20s
+    timeout: 5s
+    retries: 10
+    start_period: 60s
+   extra_hosts:
+    - "host.docker.internal:host-gateway"
+   networks:
+    - default
+    - umbrel_main_network
+    
   qubic-lite-node_ui:
     image: andyqus/qubic-lite-node:ui-v1.0.40
     restart: unless-stopped
