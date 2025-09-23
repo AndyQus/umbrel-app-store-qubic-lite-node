@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   app_proxy:
     environment:
@@ -6,38 +8,66 @@ services:
       PROXY_AUTH_ADD: "true"
       PROXY_AUTH_WHITELIST: "/api/*,/swagger/*"
 
+  # 🟣 Integrierter Tor-Client (Sidecar) – keine externen Files nötig
+  torproxy:
+    image: alpine:3.20
+    restart: unless-stopped
+    command: >
+      /bin/sh -c "
+      apk add --no-cache tor &&
+      printf 'SOCKSPort 0.0.0.0:9050\nLog notice stderr\n' > /etc/tor/torrc &&
+      tor -f /etc/tor/torrc
+      "
+    healthcheck:
+      test: ["CMD-SHELL","nc -z 127.0.0.1 9050 || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - default
+      - umbrel_main_network
+
   qubic-lite-node_edge:
     image: nginx:1.27-alpine
     restart: unless-stopped
-    depends_on: [qubic-lite-node_ui, qubic-lite-node_core]
+    depends_on:
+      - qubic-lite-node_ui
+      - qubic-lite-node_core
     volumes:
       - ${APP_DATA_DIR}/edge/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     networks:
       - default
-      - umbrel_main_network      # optional, schadet nicht
+      - umbrel_main_network
 
   qubic-lite-node_core:
     image: andyqus/qubic-lite-node:core-v1.0.40
     restart: unless-stopped
+    depends_on:
+      torproxy:
+        condition: service_healthy
     environment:
       - ASPNETCORE_URLS=http://0.0.0.0:9090
       - ASPNETCORE_ENVIRONMENT=Production
-      - TorProxy=socks5://tor:9050
+      # Immer via Tor-Sidecar, inkl. DNS über Proxy:
+      - TorProxy=socks5h://torproxy:9050
       - ASPNETCORE_DATAPROTECTION__KEYRING__PATH=/app/data/keys
       - ASPNETCORE_DATAPROTECTION__APPLICATIONNAME=QubicLite-Core
       - DATA_DIR=/app/data
+      # read-only: Onion-Adresse von Umbrel anzeigen
       - OnionHostnamePath=/tor-host/hostname
     volumes:
       - ${APP_DATA_DIR}/core-data:/app/data
       - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host:ro
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:9090/api/health > /dev/null || exit 1"]
+      test: ["CMD-SHELL", "http_proxy='' https_proxy='' wget -qO- http://127.0.0.1:9090/api/health > /dev/null || exit 1"]
       interval: 20s
       timeout: 5s
       retries: 10
+      start_period: 60s
     networks:
       - default
-      - umbrel_main_network      # WICHTIG!
+      - umbrel_main_network
 
   qubic-lite-node_ui:
     image: andyqus/qubic-lite-node:ui-v1.0.40
@@ -48,21 +78,19 @@ services:
       - ASPNETCORE_DATAPROTECTION__APPLICATIONNAME=QubicLite-UI
       - ASPNETCORE_URLS=http://0.0.0.0:8080
       - CORE_API_URL=http://qubic-lite-node_core:9090
+      # read-only: dieselbe Umbrel-Onion wie gewohnt
       - OnionHostnamePath=/tor-host/hostname
       - DATA_DIR=/app/data
     volumes:
       - ${APP_DATA_DIR}/ui-data:/app/data
       - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host:ro
-    depends_on: [qubic-lite-node_core]
+    depends_on:
+      qubic-lite-node_core:
+        condition: service_healthy
     networks:
       - default
-      - umbrel_main_network      # optional
+      - umbrel_main_network
 
 networks:
-  # ❌ KEIN external hier! Umbrel erzeugt das default-Netz selbst.
-  # ❌ Kein "name:" für default nötig.
-  # default:  <-- diesen Block komplett weglassen
-
-  # ✅ Nur das Umbrel-Main-Netz als external anhängen:
   umbrel_main_network:
     external: true
