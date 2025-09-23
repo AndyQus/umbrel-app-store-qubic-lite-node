@@ -1,15 +1,13 @@
 version: "3.9"
 
 services:
-  # Umbrels App-Proxy veröffentlicht LAN & Tor auf APP_HOST:APP_PORT
   app_proxy:
     environment:
       APP_HOST: qubic-lite-node_edge
-      APP_PORT: 8080  
+      APP_PORT: 8080
       PROXY_AUTH_ADD: "true"
       PROXY_AUTH_WHITELIST: "/api/*,/swagger/*"
 
-  # Edge-Proxy: /  → UI,  /api/* → Core
   qubic-lite-node_edge:
     image: nginx:1.27-alpine
     restart: unless-stopped
@@ -18,15 +16,17 @@ services:
       - qubic-lite-node_core
     volumes:
       - ${APP_DATA_DIR}/edge/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - default
+      - umbrel_main_network      # optional
 
-  # Core (API)
   qubic-lite-node_core:
-    image: andyqus/qubic-lite-node:core-v1.0.39
+    image: andyqus/qubic-lite-node:core-v1.0.40
     restart: unless-stopped
     environment:
       - ASPNETCORE_URLS=http://0.0.0.0:9090
       - ASPNETCORE_ENVIRONMENT=Production
-      - TorProxy=socks5://tor:9050
+      - TorProxy=socks5://tor:9050       # ← korrekt im Main-Netz
       - ASPNETCORE_DATAPROTECTION__KEYRING__PATH=/app/data/keys
       - ASPNETCORE_DATAPROTECTION__APPLICATIONNAME=QubicLite-Core
       - DATA_DIR=/app/data
@@ -39,23 +39,32 @@ services:
       interval: 20s
       timeout: 5s
       retries: 10
+    networks:
+      - default
+      - umbrel_main_network      # ← WICHTIG!
 
-  # UI
   qubic-lite-node_ui:
-    image: andyqus/qubic-lite-node:ui-v1.0.39
+    image: andyqus/qubic-lite-node:ui-v1.0.40
     restart: unless-stopped
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_DATAPROTECTION__KEYRING__PATH=/app/data/keys
       - ASPNETCORE_DATAPROTECTION__APPLICATIONNAME=QubicLite-UI
       - ASPNETCORE_URLS=http://0.0.0.0:8080
-      # UI spricht Core intern direkt (ohne Edge):
       - CORE_API_URL=http://qubic-lite-node_core:9090
-      - OnionHostnamePath=/tor-host/hostname 
+      - OnionHostnamePath=/tor-host/hostname
       - DATA_DIR=/app/data
     volumes:
       - ${APP_DATA_DIR}/ui-data:/app/data
       - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host:ro
     depends_on:
       - qubic-lite-node_core
-      
+    networks:
+      - default
+      - umbrel_main_network      # optional
+
+networks:
+  default:
+    name: app_qubic-lite-node
+  umbrel_main_network:
+    external: true              # ← existiert bereits auf Umbrel
