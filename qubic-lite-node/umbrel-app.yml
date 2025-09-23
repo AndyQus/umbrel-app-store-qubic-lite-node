@@ -9,12 +9,10 @@ port: 8080
 description: |-
   A lightweight node that synchronizes transactions and data from the Qubic network via Tor
   and provides a dashboard.
-
   ⚡ Features:
    - Tor support
    - Peer discovery
    - Transactions sync 
-
 developer: "AndyQus"
 website: "https://qubic.org"
 submitter: ""
@@ -23,7 +21,24 @@ repo: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-node"
 support: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-node/issues"
 gallery: []
 releaseNotes: ""
-dependencies: []
+
+# KRITISCH: Abhängigkeiten und Berechtigungen
+dependencies: ["tor"]
+permissions:
+  - STORAGE_DOWNLOADS
+  - NETWORKING
+
+# Pfade
 path: ""
 defaultUsername: ""
 defaultPassword: ""
+
+# WICHTIG: Tor-Integration
+torOnly: false
+
+# Erweiterte Netzwerk-Konfigurationen für UmbrelOS
+metadata:
+  network:
+    allowHostAccess: true
+    allowTorAccess: true
+    allowOutboundConnections: true
