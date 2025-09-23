@@ -21,24 +21,7 @@ repo: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-node"
 support: "https://github.com/AndyQus/umbrel-app-store-qubic-lite-node/issues"
 gallery: []
 releaseNotes: ""
-
-# KRITISCH: Abhängigkeiten und Berechtigungen
 dependencies: ["tor"]
-permissions:
-  - STORAGE_DOWNLOADS
-  - NETWORKING
-
-# Pfade
 path: ""
 defaultUsername: ""
 defaultPassword: ""
-
-# WICHTIG: Tor-Integration
-torOnly: false
-
-# Erweiterte Netzwerk-Konfigurationen für UmbrelOS
-metadata:
-  network:
-    allowHostAccess: true
-    allowTorAccess: true
-    allowOutboundConnections: true
