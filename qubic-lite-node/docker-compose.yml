@@ -40,17 +40,12 @@ services:
     volumes:
       - ${APP_DATA_DIR}/core-data:/app/data
       - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host:ro
-    # healthcheck:
-    #   test: ["CMD-SHELL", "wget --no-proxy -qO- http://127.0.0.1:9090/api/health > /dev/null || exit 1"]
-    #   interval: 30s
-    #   timeout: 15s
-    #   retries: 5
-    #   start_period: 60s
     healthcheck:
-      test: ["CMD-SHELL", "(command -v wget >/dev/null && wget -qO- http://127.0.0.1:9090/api/health >/dev/null) || (command -v curl >/dev/null && curl -fsS http://127.0.0.1:9090/api/health >/dev/null) || (command -v busybox >/dev/null && busybox wget -qO- http://127.0.0.1:9090/api/health >/dev/null) || exit 1"]
-      interval: 20s
-      timeout: 5s
-      retries: 10
+      test: ["CMD-SHELL", "wget --no-proxy -qO- http://127.0.0.1:9090/api/health > /dev/null || exit 1"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 60s
     networks:
       - default
       - umbrel_main_network
