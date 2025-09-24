@@ -17,7 +17,7 @@ services:
       - umbrel_main_network      # optional, schadet nicht
 
   qubic-lite-node_core:
-    image: andyqus/qubic-lite-node:core-v1.1.0
+    image: andyqus/qubic-lite-node:core-v1.0.42
     restart: unless-stopped
     environment:
       - ASPNETCORE_URLS=http://0.0.0.0:9090
@@ -40,7 +40,7 @@ services:
       - umbrel_main_network      # WICHTIG!
 
   qubic-lite-node_ui:
-    image: andyqus/qubic-lite-node:ui-v1.1.0
+    image: andyqus/qubic-lite-node:ui-v1.0.42
     restart: unless-stopped
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
