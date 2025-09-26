@@ -6,6 +6,17 @@ services:
       PROXY_AUTH_ADD: "true"
       PROXY_AUTH_WHITELIST: "/,/api/*,/swagger/*,/gossip/*"
 
+  # qubic-lite-node_edge:
+  #   image: nginx:1.27-alpine
+  #   restart: unless-stopped
+  #   depends_on: [qubic-lite-node_ui, qubic-lite-node_core]
+  #   volumes:
+  #     - ${APP_DATA_DIR}/edge/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+  #   networks:
+  #     - default
+  #     - umbrel_main_network      # optional, schadet nicht
+
+  # in deiner docker-compose.yml, Service: qubic-lite-node_edge
   qubic-lite-node_edge:
     image: nginx:1.27-alpine
     restart: unless-stopped
@@ -13,8 +24,11 @@ services:
     volumes:
       - ${APP_DATA_DIR}/edge/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     networks:
-      - default
-      - umbrel_main_network      # optional, schadet nicht
+      umbrel_main_network:
+        aliases:
+          - qubic-lite-node_edge   # <— wichtiger Alias für app_proxy
+      default: {}
+
 
   qubic-lite-node_core:
     image: andyqus/qubic-lite-node:core-v1.0.47
