@@ -1,19 +1,10 @@
-# services:
-#   app_proxy:
-#     environment:
-#       APP_HOST: qubic-lite-node_edge
-#       APP_PORT: 8080
-#       PROXY_AUTH_ADD: "true"
-#       PROXY_AUTH_WHITELIST: "/,/api/*,/swagger/*,/gossip/*"
 services:
   app_proxy:
     environment:
-      APP_HOST: qubic-lite-node_ui   # ← vorher: qubic-lite-node_edge
-      APP_PORT: 8080                 # bleibt 8080
+      APP_HOST: qubic-lite-node_edge
+      APP_PORT: 8080
       PROXY_AUTH_ADD: "true"
-      # Optional: nur UI whitelisten (UI ohne Login)
-      PROXY_AUTH_WHITELIST: "/"
-
+      PROXY_AUTH_WHITELIST: "/,/api/*,/swagger/*,/gossip/*"
 
   qubic-lite-node_edge:
     image: nginx:1.27-alpine
