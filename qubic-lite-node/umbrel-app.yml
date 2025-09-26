@@ -4,7 +4,7 @@ name: "Qubic LiteNode+"
 tagline: "⚠️ Test version of the Qubic Lite Node dashboard"
 icon: "https://raw.githubusercontent.com/AndyQus/umbrel-app-store-qubic-lite-node/main/qubic-lite-node/icon.svg"
 category: "Productivity"
-version: "1.0.51"
+version: "1.0.52"
 port: 8080
 description: |-
   A lightweight node that synchronizes transactions and data from the Qubic network via Tor
