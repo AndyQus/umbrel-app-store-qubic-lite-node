@@ -29,7 +29,6 @@ services:
           - qubic-lite-node_edge   # <— wichtiger Alias für app_proxy
       default: {}
 
-
   qubic-lite-node_core:
     image: andyqus/qubic-lite-node:core-v1.0.48
     restart: unless-stopped
