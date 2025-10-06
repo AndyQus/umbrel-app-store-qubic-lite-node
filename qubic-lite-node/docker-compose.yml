@@ -44,6 +44,10 @@ services:
       - GOSSIP_SHARED_SECRET=mysecret_b3d958e5-d3b7-4b47-a8ef-13e67fd07f85   # ✅ HIER hinzufügen
       - GOSSIP_ALLOW_UNVERIFIED=false
       - WATCH_MIRROR_TO_ALL=true
+      - HTTP_PROXY=
+      - HTTPS_PROXY=
+      - ALL_PROXY=
+      - NO_PROXY=localhost,127.0.0.1,::1,.onion
     volumes:
       - ${APP_DATA_DIR}/core-data:/app/data
       - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host:ro
