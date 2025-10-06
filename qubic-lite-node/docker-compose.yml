@@ -30,7 +30,7 @@ services:
       default: {}
 
   qubic-lite-node_core:
-    image: andyqus/qubic-lite-node:core-v1.0.63
+    image: andyqus/qubic-lite-node:core-v1.1.2
     restart: unless-stopped
     environment:
       - ASPNETCORE_URLS=http://0.0.0.0:9090
@@ -41,7 +41,8 @@ services:
       - DATA_DIR=/app/data
       - OnionHostnamePath=/tor-host/hostname
       - GOSSIP_SHARED_SECRET=mysecret_b3d958e5-d3b7-4b47-a8ef-13e67fd07f85   # ✅ HIER hinzufügen
-      - GOSSIP_ALLOW_UNVERIFIED=true
+      - GOSSIP_ALLOW_UNVERIFIED=false
+      - WATCH_MIRROR_TO_ALL=true
     volumes:
       - ${APP_DATA_DIR}/core-data:/app/data
       - /home/umbrel/umbrel/tor/data/app-qubic-lite-node:/tor-host:ro
@@ -55,7 +56,7 @@ services:
       - umbrel_main_network      # WICHTIG!
 
   qubic-lite-node_ui:
-    image: andyqus/qubic-lite-node:ui-v1.0.63
+    image: andyqus/qubic-lite-node:ui-v1.1.2
     restart: unless-stopped
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
